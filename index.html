@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For You</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <style>
+      canvas {
+        background-color: rgb(255, 202, 236);
+        display: block;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+      var canvas = document.getElementById("myCanvas");
+      var stage = new createjs.Stage(canvas);
+      var text = new createjs.Text(
+        "Ini permintaan maaf aku ke sayang...\nKarena kemarin aku udah sibuk\nMaaf ya kalo aku masih banyak kurangnya\nAku selalu berusaha jadi yang terbaik buat kamu\n I Love You <3",
+        "bold 24px 'Dancing Script', cursive",
+        "#fff"
+      );
+      text.textAlign = "center";
+      text.x = canvas.width / 2;
+      text.y = canvas.height / 2 - text.getMeasuredLineHeight();
+      stage.addChild(text);
+
+      function createHeart() {
+        var heart = new createjs.Shape();
+        var size = Math.random() * 40 + 20;
+        var gradient = heart.graphics
+          .beginRadialGradientFill(
+            ["#FF1493", "#FF69B4", "#FFB6C1"],
+            [0, 0.5, 1],
+            0,
+            0,
+            0,
+            0,
+            0,
+            size
+          )
+          .moveTo(0, -size / 2)
+          .bezierCurveTo(-size, -size, -size, size / 2, 0, size)
+          .bezierCurveTo(size, size / 2, size, -size, 0, -size / 2)
+          .endFill();
+        heart.x = Math.random() * canvas.width;
+        heart.y = canvas.height + size;
+        heart.alpha = Math.random() * 0.5 + 0.3;
+        stage.addChildAt(heart, 1);
+
+        createjs.Tween.get(heart)
+          .to({ y: -size, alpha: 0 }, 5000 + Math.random() * 2000)
+          .call(function () {
+            stage.removeChild(heart);
+          });
+      }
+
+      createjs.Ticker.framerate = 60;
+      createjs.Ticker.addEventListener("tick", function () {
+        stage.update();
+      });
+      setInterval(createHeart, 50);
+    </script>
+  </body>
+</html>
